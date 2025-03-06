@@ -119,7 +119,6 @@
                 return;
             }
 
-            await LoadWebcams();
             document.getElementById("startARButton").style.display = "block";
         }
 
@@ -152,6 +151,7 @@
                     }
                 ).then((unityInstance) => {
                 window.unityInstance = unityInstance;
+		    RequestWebcam();
               
                 loadingBar.style.display = "none";
             });
