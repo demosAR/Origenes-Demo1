@@ -6,16 +6,9 @@
     <title>Unity WebGL Player | Origenes Diners</title>
     <link rel="stylesheet" href="TemplateData/style.css">
 
-<style>
+    <style>
         html{
             height: -webkit-fill-available;
-        }
-        
-         @font-face {
-            font-family: 'MiFuente';
-            src: url('TemplateData/mifuente.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
         }
         body {
             margin: 0;
@@ -24,7 +17,6 @@
             min-height: -webkit-fill-available;
             width: 100vw;
             overflow: hidden;
-               font-family: 'MiFuente', sans-serif; /* AGREGAR ESTA LINEA*/
         }
         .ctaDiv {
             display: flex;
@@ -38,46 +30,17 @@
             bottom: 0;
             background: #fffa;
             z-index: 99;
-               font-family: 'MiFuente', sans-serif;
         }
-        
-        .button-style {
-            background-color: #524935; /* Fondo blanco */
-            color: #ffffff; /* Color del texto en negro */
-            padding: 10px 20px; /* Espaciado interno */
-            font-size: 16px; /* Tamaño de la fuente */
-            cursor: pointer; /* Cambiar cursor al pasar */
-            transition: background-color 0.3s, color 0.3s; /* Transición suave */
-               font-family: 'MiFuente', sans-serif;
-                margin-top: 18vh;
-        }
-
-        .button-style:hover {
-            background-color: #f0f0f0; /* Cambia el fondo al pasar el cursor */
-            color: #000000; /* Mantener el color del texto en negro al pasar el cursor */
-        }
-        
-        /* Cambia el fondo de la pestaña de selección de cámara */
-        #startARDiv {
-            background-image: url('TemplateData/Bg.jpg'); /* Establece la imagen como fondo */
-            background-size: cover; /* Asegura que la imagen cubra toda el área */
-            background-position: center center; /* Centra la imagen */
-            background-repeat: no-repeat; /* Evita que la imagen se repita */
-        }
-        
-        
     </style>
 </head>
 <body>
     <video id="webcam-video" muted autoplay playsinline style="width:1px;position:absolute"></video>
     <canvas id="video-canvas" style="width:100%; height:100%; object-fit:cover; position:absolute"></canvas>
-   <div id="startARDiv" class="ctaDiv">
+    <div id="startARDiv" class="ctaDiv">
         <select id="chooseCamSel" style="display: none;" onchange="SelectCam()"></select>
-       <div style="position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%); width: 80vw; color: white; text-align: center; border: 1px solid white; padding: 10px; background-color: rgba(82, 73, 53, 0.7);">
-    <p>Esta experiencia de Realidad Aumentada requiere acceso a la cámara y los sensores de movimiento de tu dispositivo.</p>
-</div>
-    <button id="startARButton" class="button-style" style="display:none" onclick="StartAR()">Permitir Acceso</button>
-</div>
+        <p style="text-align: center; width:60vw">This augmented reality experience requires access to your device's camera and motion sensors</p>
+        <button id="startARButton" style="display:none" onclick="StartAR()">ALLOW ACCESS</button>
+    </div>
     <div id="screenshotDiv" style="display: none;" class="ctaDiv">
         <div style="position:relative; background-color:white; padding:10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.25);">
             <img id="screenshotImg" src="" alt="screenshot" style="width:80vw; height:80vh">
@@ -87,12 +50,9 @@
     <div id="errorDiv" class="ctaDiv" style="display: none; background:#aaa">
         <p id="errorText" style="text-align: center; width:60vw; color:white"></p>
     </div>
-      <div id="unity-container" class="unity-mobile">
+    <div id="unity-container" class="unity-mobile">
         <canvas id="unity-canvas" style="width: 100%; height: 100%; background: #0000; z-index: -99;"></canvas>
         <div id="unity-loading-bar">
-               <div id="custom-image-overlay" style="position: absolute; top: 0; left: 0; width: 105%; height: 105%; background: rgba(0,0,0,0); display: flex; align-items: center; justify-content: center; z-index: 100;">
-                <img src="TemplateData/logosv2.jpg" alt="Custom Overlay" style="max-width: 150%; max-height: 150%; margin-bottom: 140px;">
-            </div>
             <div id="unity-logo"></div>
             <div id="unity-progress-bar-empty">
                 <div id="unity-progress-bar-full"></div>
@@ -102,7 +62,7 @@
     </div>
     <script src="arcamera.js" type="text/javascript"></script>
     <script src="wtracker.js" type="text/javascript"></script>
-    <script src="Build/ORIGENES V1.loader.js"></script>
+    <script src="Build/build.loader.js"></script>
     <script>
         var initialize = async() =>{
             var unityCanvas = document.querySelector("#unity-canvas");
@@ -119,6 +79,7 @@
                 return;
             }
 
+            await LoadWebcams();
             document.getElementById("startARButton").style.display = "block";
         }
 
@@ -135,9 +96,9 @@
             
             document.getElementById('startARDiv').style.display = 'none';
             createUnityInstance(document.querySelector("#unity-canvas"), {
-                    dataUrl: "Build/ORIGENES V1.data",
-                    frameworkUrl: "Build/ORIGENES V1.framework.js",
-                    codeUrl: "Build/ORIGENES V1.wasm",
+                    dataUrl: "Build/build.data",
+                    frameworkUrl: "Build/build.framework.js",
+                    codeUrl: "Build/build.wasm",
                     streamingAssetsUrl: "StreamingAssets",
                     companyName: "Diners Club",
                     productName: "Origenes Diners",
@@ -151,8 +112,7 @@
                     }
                 ).then((unityInstance) => {
                 window.unityInstance = unityInstance;
-		    RequestWebcam();
-              
+                RequestWebcam();
                 loadingBar.style.display = "none";
             });
             StartMotionSensors();
